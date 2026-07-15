@@ -4,28 +4,37 @@ on:
   push:
     branches:
       - main
-      - master
 
 permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }}
+  deploy:
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: pages-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install and Build 🔧
-        run: |
-          npm install
-          # Como o build padrão faz o build completo incluindo o server.ts,
-          # para o GitHub Pages (que é apenas estático) nós rodamos apenas o vite build
-          npx vite build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
 
-      - name: Deploy 🚀
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # A pasta onde o Vite gera o build estático
-          branch: gh-pages # A branch de destino para o GitHub Pages
+          branch: gh-pages
+          folder: dist
+          clean: true
