@@ -1,0 +1,6 @@
+{
+  "name": "AI Red Teaming Arena",
+  "description": "Interactive AI Security Sandbox. Learn about Prompt Injection, Leakage, Jailbreaking, and automated Red Teaming fuzzing simulations with real Gemini API responses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
